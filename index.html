@@ -221,9 +221,12 @@ window.onload = function(){
   ALERT_DAYS  = parseInt(localStorage.getItem('tm_alert_days')) || 7;
   accessToken = localStorage.getItem('tm_token') || null;
 
-  // Register SW
-  if('serviceWorker' in navigator)
-    navigator.serviceWorker.register('sw.js');
+  // Unregister any old service workers to avoid cache issues
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      regs.forEach(function(r){ r.unregister(); });
+    });
+  }
 
   // Load Google Identity Services
   var s=document.createElement('script');
